@@ -1,51 +1,106 @@
 
+import { NavigationContainer } from "@react-navigation/native"
+import { createNativeStackNavigator } from "@react-navigation/native-stack"
+import { useEffect } from "react"
+import { useState } from "react"
+import { ScrollView, Text, View, StyleSheet, Button, Alert} from "react-native"
 
+const PilhaTelas = createNativeStackNavigator()
+const URL_API = 'https://jsonplaceholder.typicode.com/posts'
 
-function TelaDetalhes ({route, navigation}){
+function TelaInicial({route, navigation}){
+    const [ user, setUsers] = useState([])
+    
+    useEffect( ()=>{
+        fetch(URL_API).then( resposta => resposta.json())
+        .then( json => {setUsers( json )})
+        .catch( () => {alert.alert("Erro ao carregar usuários")})
+    },[])
+    
     return(
-        <View style={styles.container}>
-            <Text style={styles.titulo}>Detalhes</Text>
-            </View>
+       <ScrollView>
+       <View style={styles.container}>
+            <Text>Usuários </Text>
+           { user.map( us => (
+<View key={us.id} style={styles.cardContainer}> 
+    <View><Text>Nome: {us.name}</Text>
+<Text>Email: {us.email}</Text></View>
+   
+    <Button title="Ver Detalhes" color="green"
+    onPress={()=>{navigation.navigate("VisualizarUsuario", {'id':us.id})}}/>
+</View>
+            ))}
+        </View>
+        </ScrollView>
     )
 }
-export default function App() {
-  
-    return (
-      <NavigationContainer>
-          <PilhaTelas.Navigator initialRouteName='TelaInicial'>
-              <PilhaTelas.Screen
-                  name="TelaInicial"
-                  component={TelaInicial}
-                  options={{title:"Tela inicial"}}
-              />
-              <PilhaTelas.Screen
-                  name="TelaDetalhes"
-                  component={TelaDetalhes}
-                  options={{title:"Detalhes"}}
-              />
-             {/* <PilhaTelas.Screen
-                  name="TelaHistorico"
-                  component={TelaHistorico}
-                  options={{title:"Histórico"}}
-              /> */}
-          </PilhaTelas.Navigator>
-      </NavigationContainer>
-    );
-  }
 
-
-
-
-  const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-      backgroundColor: '#fff',
-      alignItems: 'center',
-      justifyContent: 'top',
-      width: '100%'
-    },
-    titulo: {
-      marginTop: '10%',
-      fontSize: 20
-    },
-});
+function VizualizarUsuario({route, navigation}){
+    const [user, setUser] = useState( {} )
+    useEffect( ()=>{
+    fetch(`${URL_API}/${route.param.id}`)
+    .then( response => response.json())
+    .then( json => {setUser( json )})
+    .catch( ()=> { alert.alert("erro", "não foi possível carregar")})
+    }, [route.params.id])
+    
+    return(
+    <ScrollView>
+        <View style={styles.container}>
+    {/* <Text>ID: {route.params.id}</Text> */}
+    <Text>Nome: {user.name}</Text>
+    <Text>Email: {user.email}</Text>
+    
+    <Text>Endereço</Text>
+    <Text>Rua: {user.adress?.street}</Text>
+        </View>
+    </ScrollView>
+    )}
+    function TelaDetalhes ({route, navigation}){
+        return(
+            <View style={styles.container}>
+                <Text style={styles.titulo}>Detalhes</Text>
+                </View>
+        )
+    }
+    export default function App() {
+      
+        return (
+          <NavigationContainer>
+              <PilhaTelas.Navigator initialRouteName='TelaInicial'>
+                  <PilhaTelas.Screen
+                      name="TelaInicial"
+                      component={TelaInicial}
+                      options={{title:"Tela inicial"}}
+                  />
+                  <PilhaTelas.Screen
+                      name="TelaDetalhes"
+                      component={TelaDetalhes}
+                      options={{title:"Detalhes"}}
+                  />
+                 {/* <PilhaTelas.Screen
+                      name="TelaHistorico"
+                      component={TelaHistorico}
+                      options={{title:"Histórico"}}
+                  /> */}
+              </PilhaTelas.Navigator>
+          </NavigationContainer>
+        );
+      }
+    
+    
+    
+    
+      const styles = StyleSheet.create({
+        container: {
+          flex: 1,
+          backgroundColor: '#fff',
+          alignItems: 'center',
+          justifyContent: 'top',
+          width: '100%'
+        },
+        titulo: {
+          marginTop: '10%',
+          fontSize: 20
+        },
+    });
