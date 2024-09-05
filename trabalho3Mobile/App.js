@@ -4,6 +4,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack"
 import { useEffect } from "react"
 import { useState } from "react"
 import { ScrollView, Text, View, StyleSheet, Button, Alert} from "react-native"
+import SyncStorage from 'sync-storage';  //salvar dados localmente
 
 const PilhaTelas = createNativeStackNavigator()
 const URL_API = 'https://jsonplaceholder.typicode.com/posts'
@@ -56,13 +57,27 @@ function VizualizarUsuario({route, navigation}){
         </View>
     </ScrollView>
     )}
+
     function TelaDetalhes ({route, navigation}){
         return(
             <View style={styles.container}>
                 <Text style={styles.titulo}>Detalhes</Text>
+                <View style={styles.buttonContainer}>
+                <Button
+                    title='Voltar'
+                    color="black"
+                    onPress={()=>navigation.goBack()}
+                />
+                <Button
+                    title='Tela inicial'
+                    color="black"
+                    onPress={()=>navigation.navigate("TelaInicial")}
+                />
+            </View>
                 </View>
         )
     }
+
     export default function App() {
       
         return (
