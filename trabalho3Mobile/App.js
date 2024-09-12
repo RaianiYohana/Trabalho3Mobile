@@ -3,7 +3,8 @@ import { NavigationContainer } from "@react-navigation/native"
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
 import { useEffect } from "react"
 import { useState } from "react"
-import { ScrollView, Text, View, StyleSheet, Button, Alert } from "react-native"
+import { ScrollView, Text, View, StyleSheet, Button, Alert} from "react-native"
+import SyncStorage from 'sync-storage';  //salvar dados localmente
 
 const PilhaTelas = createNativeStackNavigator()
 const URL_API = 'https://jsonplaceholder.typicode.com/posts'
@@ -44,41 +45,56 @@ function VizualizarPost({ route, navigation }) {
             .then(json => { setUser(json) })
             .catch(() => { alert.alert("erro", "não foi possível carregar") })
     }, [route.params.id])
-
-    return (
-        <ScrollView>
-            <View style={styles.container}>
-                {/* <Text>ID: {route.params.id}</Text> */}
-                <Text>Nome: {user.name}</Text>
-                <Text>Email: {user.email}</Text>
-                <Text>Body:</Text>
-            </View>
-        </ScrollView>
-    )
-}
-function TelaDetalhes({ route, navigation }) {
-    return (
+    
+    return(
+    <ScrollView>
         <View style={styles.container}>
-            <Text style={styles.titulo}>Detalhes</Text>
+    {/* <Text>ID: {route.params.id}</Text> */}
+    <Text>Nome: {user.name}</Text>
+    <Text>Email: {user.email}</Text>
+    
+    <Text>Endereço</Text>
+    <Text>Rua: {user.adress?.street}</Text>
         </View>
-    )
-}
-export default function App() {
+    </ScrollView>
+    )}
 
-    return (
-        <NavigationContainer>
-            <PilhaTelas.Navigator initialRouteName='TelaInicial'>
-                <PilhaTelas.Screen
-                    name="TelaInicial"
-                    component={TelaInicial}
-                    options={{ title: "Tela inicial" }}
+    function TelaDetalhes ({route, navigation}){
+        return(
+            <View style={styles.container}>
+                <Text style={styles.titulo}>Detalhes</Text>
+                <View style={styles.buttonContainer}>
+                <Button
+                    title='Voltar'
+                    color="black"
+                    onPress={()=>navigation.goBack()}
                 />
-                <PilhaTelas.Screen
-                    name="TelaDetalhes"
-                    component={TelaDetalhes}
-                    options={{ title: "Detalhes" }}
+                <Button
+                    title='Tela inicial'
+                    color="black"
+                    onPress={()=>navigation.navigate("TelaInicial")}
                 />
-                {/* <PilhaTelas.Screen
+            </View>
+                </View>
+        )
+    }
+
+    export default function App() {
+      
+        return (
+          <NavigationContainer>
+              <PilhaTelas.Navigator initialRouteName='TelaInicial'>
+                  <PilhaTelas.Screen
+                      name="TelaInicial"
+                      component={TelaInicial}
+                      options={{title:"Tela inicial"}}
+                  />
+                  <PilhaTelas.Screen
+                      name="TelaDetalhes"
+                      component={TelaDetalhes}
+                      options={{title:"Detalhes"}}
+                  />
+                 {/* <PilhaTelas.Screen
                       name="TelaHistorico"
                       component={TelaHistorico}
                       options={{title:"Histórico"}}
