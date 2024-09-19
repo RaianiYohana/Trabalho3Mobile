@@ -37,7 +37,7 @@ function TelaInicial({ route, navigation }) {
                             
 
                             <Button style={styles.botao2} title="Ver Detalhes" color="green"
-                                onPress={() => { navigation.navigate("VisualizarPost", { 'id': us.id }) }} />
+                                onPress={() => { navigation.navigate("VisualizarPost", { 'id': us.id, 'title': us.title, 'body': us.body }) }} />
                         </View>
                     ))}
                 </View>
@@ -90,7 +90,7 @@ function VisualizarPost({route, navigation}){
             <View>
             <View>
             <Text>Nome: {route.params.title}</Text>
-            <Text>Comentário: {route.params.body}</Text>  
+            <Text>Notícia: {route.params.body}</Text>  
             </View>
             <Text style={styles.titulo}>Detalhes</Text>
 
@@ -168,7 +168,7 @@ function MeusFavoritos({ navigation }) {
 <View style={styles.container}>
    <Button
     title= "Ver os detalhes"
-    color="Pink"
+    color="pink"
 onPress={() => navigation.navigate("VisualizarPost", {id: post.id, title: post.title, body: post.body})}
 />
 </View>
