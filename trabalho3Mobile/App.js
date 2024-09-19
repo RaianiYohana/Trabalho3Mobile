@@ -63,6 +63,26 @@ function VisualizarPost({ route, navigation }) {
     </ScrollView>
     )}
 
+
+//questao 2
+function Detalhes({route,navigation}){
+    const [user, setUser] = useState( {} )
+    useEffect( ()=>{
+    fetch(`${URL_API2}/${route.param.id}`)
+    .then( response => response.json())
+    .then( json => {setUser( json )})
+    .catch( ()=> { alert.alert("erro", "não foi possível carregar os detalhes ")})
+    }, [route.params.id])
+
+    return(
+        <ScrollView>
+            <Text>Nome: {user.name}</Text>
+            <Text>Comentário:</Text>   //ARRUMAR NAO TERMINEI
+        </ScrollView>
+    )
+} 
+
+//questao 2 
     function TelaDetalhes ({route, navigation}){
        
         return(
@@ -94,7 +114,8 @@ function VisualizarPost({ route, navigation }) {
                       component={TelaInicial}
                       options={{title:"Tela inicial"}}
                   />
-                  <PilhaTelas.Screen
+                  
+                  <PilhaTelas.Screen //questao 2 
                       name="TelaDetalhes"
                       component={TelaDetalhes}
                       options={{title:"Detalhes"}}
