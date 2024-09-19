@@ -36,7 +36,7 @@ function TelaInicial({ route, navigation }) {
                             </View>
 
                             <Button title="Ver Detalhes" color="green"
-                                onPress={() => { navigation.navigate("VisualizarPost", { 'id': us.id }) }} />
+                                onPress={() => { navigation.navigate("VisualizarPost", { 'id': us.id, 'title': us.title, 'body': us.body }) }} />
                         </View>
                     ))}
                 </View>
@@ -110,19 +110,18 @@ function VisualizarPost({route, navigation}){
     return(
         <ScrollView>
             <View>
-            {/* <View>
-            <Text>Nome: {user.name}</Text>
-            <Text>Comentário: {user.body}</Text>  
-            <Text>Email: {user.email}</Text>
-            </View> */}
+            <View>
+            <Text>Nome: {route.params.title}</Text>
+            <Text>Comentário: {route.params.body}</Text>  
+            </View>
             <Text style={styles.titulo}>Detalhes</Text>
 
             <Button title="Clique para favoritar" 
             color="red" onPress={marcarFavorito}></Button>
-            <Text style={styles}>Comentários</Text>
+            <Text >Comentários</Text>
                     {comentario.map(posts => (
-                        <View key={posts.id} style={styles}>
-                            <View style={styles}>
+                        <View key={posts.id} >
+                            <View >
                                 <Text>Nome: {posts.name}</Text>
                                 <Text>Email: {posts.email}</Text>
                                 <Text>Comentário: {posts.body.replaceAll("\n"," ")}</Text>
@@ -161,12 +160,12 @@ function VisualizarPost({route, navigation}){
 
 
 function MeusFavoritos({ navigation }) {
-    conts[postFavorito, setpostFavorito] = useState([]);
+    const [postFavorito, setpostFavorito] = useState([]);
     useEffect(() => {
         const carregarTodosFavoritos = async () => {
             try {
-                const favoritos = SyncStorage.get('favoritos') || [];
-                // console.log(favoritos)  // mostar no naveg
+                const favoritos = SyncStorage.get('favoritado') || [];
+                console.log(favoritos)  // mostar no naveg
                 setpostFavorito(favoritos);
             } catch (error) {
                 Alert.alert("Erro", "Não é possível carregar todos os posts favoritos");
@@ -227,7 +226,7 @@ export default function App() {
                 />
                 <PilhaTelas.Screen
                     name="MeusFavoritos"
-                    component={VisualizarPost}
+                    component={MeusFavoritos}
                     options={{ title: "MeusFavoritos" }}
                 />
                 {/* <PilhaTelas.Screen
@@ -245,8 +244,8 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#fff',
-        alignItems: 'center',
-        justifyContent: 'top',
+        // alignItems: 'center',
+        // justifyContent: 'top',
         width: '100%'
     },
     titulo: {
