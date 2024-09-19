@@ -8,7 +8,7 @@ import SyncStorage from 'sync-storage'; //salvar dados localmente
 
 const PilhaTelas = createNativeStackNavigator()
 const URL_API = 'https://jsonplaceholder.typicode.com/posts'
-const URL_API2 = 'https://jsonplaceholder.typicode.com/posts/1/comments'
+const URL_API2 = 'https://jsonplaceholder.typicode.com/posts/:id/comments'
 
 function TelaInicial({ route, navigation }) {
     const [user, setUsers] = useState([])
@@ -70,11 +70,14 @@ function TelaInicial({ route, navigation }) {
 
 //questao 2
 function VisualizarPost({route, navigation}){
-    const [comentario, setComentario] = useState( {} )
+    const [comentario, setComentario] = useState( [] )
     useEffect( ()=>{
-    fetch(`${URL_API2}/${route.params.id}`)
+        var a = `${URL_API2.replaceAll(":id",route.params.id)}`
+        console.log(a);
+        
+    fetch(a)
     .then( response => response.json())
-    .then( json => {setComentario( json[0])})
+    .then( json => {setComentario( json )})
     .catch( ()=> { alert.alert("erro", "não foi possível carregar os detalhes ")})
     }, [route.params.id])
 
@@ -106,7 +109,7 @@ function VisualizarPost({route, navigation}){
 
     return(
         <ScrollView>
-            <view>
+            <View>
             {/* <View>
             <Text>Nome: {user.name}</Text>
             <Text>Comentário: {user.body}</Text>  
@@ -124,7 +127,7 @@ function VisualizarPost({route, navigation}){
                             </View>
                         </View>
                     ))}
-            </view>
+            </View>
         </ScrollView>
         
     );
