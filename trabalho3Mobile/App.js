@@ -25,6 +25,10 @@ function TelaInicial({ route, navigation }) {
         <ScrollView>
             <View style={styles.container}>
                 <Text> Post </Text>
+                <View style={styles.botao}>
+                    <Button
+                    title="Acessar os favoritos" color="blue" onPress={()=>navigation.navigate("Meus Favoritos")}/>
+                </View>
                 {user.map(us => (
                     <View key={us.id} >
                         <View>
