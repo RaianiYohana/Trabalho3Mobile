@@ -24,10 +24,10 @@ function TelaInicial({ route, navigation }) {
         <SafeAreaView style={styles.container}>
             <ScrollView>
                 <View style={styles.container}>
-                    <Text> Post </Text>
+                    <Text> POST </Text>
                     <View style={styles.botao}>
                         <Button
-                            title="Acessar os favoritos" color="blue" onPress={() => navigation.navigate("Meus Favoritos")} />
+                            title="Acessar os favoritos" color="blue" onPress={() => navigation.navigate("MeusFavoritos")} />
                     </View>
                     {user.map(us => (
                         <View key={us.id} >
@@ -88,20 +88,20 @@ function VisualizarPost({route, navigation}){
             const detalheFavorito = {
                 id: route.params.id,
                 title: route.params.title,
-                body: route.param.body
+                body: route.params.body
             }
             const detalheF = favoritado.find (p =>p.id === detalheFavorito.id )
             if (!detalheF ){
                 favoritado.push(detalheFavorito);
                 SyncStorage.set('favoritado' , favoritado);
-                Alert.alert("Comentário favoritado", "Esse comentário foi add para a lista de favoritos!");
+                Alert.alert("Comentário favoritado", "Esse comentário foi adicionado para a lista de favoritos!");
 
             }else{
-                Alert.alert("Erro ", "este cometário já foi adicionado aos comentarios favoritados"); 
+                Alert.alert("Erro ", "Este cometário já está adicionado aos comentarios favoritos!"); 
             }
             
         }catch (error) {
-                Alert.alert("Erro", "Não foi possível favoritar o post.");
+                Alert.alert("Erro", "Não foi possível favoritar o post!");
                 console.log(error.message);
                 
         }
@@ -118,12 +118,12 @@ function VisualizarPost({route, navigation}){
             <Button title="Clique para favoritar" 
             color="red" onPress={marcarFavorito}></Button>
             <Text style={styles}>Comentários</Text>
-                    {comentario.map(pt => (
-                        <View key={pt.id} style={styles}>
+                    {comentario.map(posts => (
+                        <View key={posts.id} style={styles}>
                             <View style={styles}>
-                                <Text>Nome: {pt.name}</Text>
-                                <Text>Email: {pt.email}</Text>
-                                <Text>Comentário: {pt.body.replaceAll("\n"," ")}</Text>
+                                <Text>Nome: {posts.name}</Text>
+                                <Text>Email: {posts.email}</Text>
+                                <Text>Comentário: {posts.body.replaceAll("\n"," ")}</Text>
                             </View>
                         </View>
                     ))}
@@ -220,6 +220,11 @@ export default function App() {
                     name="VisualizarPost"
                     component={VisualizarPost}
                     options={{ title: "VisualizarPost" }}
+                />
+                <PilhaTelas.Screen
+                    name="MeusFavoritos"
+                    component={VisualizarPost}
+                    options={{ title: "MeusFavoritos" }}
                 />
                 {/* <PilhaTelas.Screen
                       name="TelaHistorico"
