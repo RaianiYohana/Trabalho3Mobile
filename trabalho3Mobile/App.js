@@ -41,68 +41,112 @@ function TelaInicial({ route, navigation }) {
     )
 }
 
-function VisualizarPost({ route, navigation }) {
-    const [user, setUser] = useState({})
-    useEffect(() => {
-        fetch(`${URL_API2}/${route.params.id}`)
-            .then(response => response.json())
-            .then(json => { setUser(json[0]) })
-            .catch(() => { Alert.alert("erro", "não foi possível carregar") })
-    }, [route.params.id])
+// function VisualizarPost({ route, navigation }) {
+//     const [user, setUser] = useState({})
+//     useEffect(() => {
+//         fetch(`${URL_API2}/${route.params.id}`)
+//             .then(response => response.json())
+//             .then(json => { setUser(json[0]) })
+//             .catch(() => { Alert.alert("erro", "não foi possível carregar") })
+//     }, [route.params.id])
     
-    return(
-    <ScrollView>
-        <View style={styles.container}>
-    {/* <Text>ID: {route.params.id}</Text> */}
-    <Text>Nome: {user.name}</Text>
-    <Text>Email: {user.email}</Text>
-    <Text>Endereço</Text>
-    <Text>Rua: {user.adress?.street}</Text>
+//     return(
+//     <ScrollView>
+//         <View style={styles.container}>
+//     {/* <Text>ID: {route.params.id}</Text> */}
+//     <Text>Nome: {user.name}</Text>
+//     <Text>Email: {user.email}</Text>
+//     <Text>Endereço</Text>
+//     <Text>Rua: {user.adress?.street}</Text>
 
-        </View>
-    </ScrollView>
-    )}
+//         </View>
+//     </ScrollView>
+//     )}
 
 
 //questao 2
-function Detalhes({route,navigation}){
-    const [user, setUser] = useState( {} )
+function VisualizarPost({route, navigation}){
+    const [comentario, setComentario] = useState( {} )
     useEffect( ()=>{
-    fetch(`${URL_API2}/${route.param.id}`)
+    fetch(`${URL_API2}/${route.params.id}`)
     .then( response => response.json())
-    .then( json => {setUser( json )})
+    .then( json => {setComentario( json[0])})
     .catch( ()=> { alert.alert("erro", "não foi possível carregar os detalhes ")})
     }, [route.params.id])
 
+    const marcarFavorito = async () => {
+        try{
+            const favoritado = SyncStorage.get('favoritado') || []
+
+            const detalheFavorito = {
+                id: route.params.id,
+                title: route.params.title,
+                body: route.param.body
+            }
+            const detalheF = favoritado.find (p =>p.id === detalheFavorito.id )
+            if (!detalheF ){
+                favoritado.push(detalheFavorito);
+                SyncStorage.set('favoritado' , favoritado);
+                Alert.alert("Comentário favoritado", "Esse comentário foi add para a lista de favoritos!");
+
+            }else{
+                Alert.alert("Erro ", "este cometário já foi adicionado aos comentarios favoritados"); 
+            }
+            
+        }catch (error) {
+                Alert.alert("Erro", "Não foi possível favoritar o post.");
+                console.log(error.message);
+                
+        }
+    }
+
     return(
         <ScrollView>
+            <view>
+            {/* <View>
             <Text>Nome: {user.name}</Text>
-            <Text>Comentário:</Text>   //ARRUMAR NAO TERMINEI
+            <Text>Comentário: {user.body}</Text>  
+            <Text>Email: {user.email}</Text>
+            </View> */}
+            <Button title="Clique para favoritar" 
+            color="red" onPress={marcarFavorito}></Button>
+            <Text style={styles}>Comentários</Text>
+                    {comentario.map(pt => (
+                        <View key={pt.id} style={styles}>
+                            <View style={styles}>
+                                <Text>Nome: {pt.name}</Text>
+                                <Text>Email: {pt.email}</Text>
+                                <Text>Comentário: {pt.body.replaceAll("\n"," ")}</Text>
+                            </View>
+                        </View>
+                    ))}
+            </view>
         </ScrollView>
-    )
+        
+    );
 } 
 
-//questao 2 
-    function TelaDetalhes ({route, navigation}){
+
+     function TelaDetalhes ({route, navigation}){
        
-        return(
+       return(
             <View style={styles.container}>
-                <Text style={styles.titulo}>Detalhes</Text>
+               <Text style={styles.titulo}>Detalhes</Text>
                 <View style={styles.buttonContainer}>
                 <Button
                     title='Voltar'
                     color="black"
-                    onPress={()=>navigation.goBack()}
-                />
+                   onPress={()=>navigation.goBack()}
+                 />
                 <Button
-                    title='Tela inicial'
-                    color="black"
-                    onPress={()=>navigation.navigate("TelaInicial")}
-                />
-            </View>
-                </View>
-        )
-    }
+                  title='Tela inicial'
+                   color="black"
+                   onPress={()=>navigation.navigate("TelaInicial")}
+               />
+             </View>
+               </View>
+        );
+     }
 
     export default function App() {
       
@@ -148,4 +192,5 @@ const styles = StyleSheet.create({
         marginTop: '10%',
         fontSize: 20
     },
+    
 });
