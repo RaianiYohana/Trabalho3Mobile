@@ -3,8 +3,8 @@ import { NavigationContainer } from "@react-navigation/native"
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
 import { useEffect } from "react"
 import { useState } from "react"
-import { ScrollView, Text, View, StyleSheet, Button, Alert} from "react-native"
-import SyncStorage from 'sync-storage';  //salvar dados localmente
+import { ScrollView, Text, View, StyleSheet, Button, Alert, SafeAreaView} from "react-native"
+import SyncStorage from 'sync-storage'; //salvar dados localmente
 
 const PilhaTelas = createNativeStackNavigator()
 const URL_API = 'https://jsonplaceholder.typicode.com/posts'
@@ -15,17 +15,20 @@ function TelaInicial({ route, navigation }) {
 
     useEffect(() => {
         fetch(URL_API).then(resposta => resposta.json())
-            .then(json => { setUsers(json) })
-            .catch(() => { alert.alert("Erro ao carregar usuários") })
+            .then(json => setUsers(json))
+            .catch(() => { Alert.alert("erro","Erro ao carregar usuários") })
     }, [])
 
     return (
+        
+        <SafeAreaView style={styles.container}>
         <ScrollView>
             <View style={styles.container}>
-                <Text>Usuários </Text>
+                <Text> Post </Text>
                 {user.map(us => (
-                    <View key={us.id} style={styles.cardContainer}>
-                        <View><Text>titulo: {us.title}</Text>
+                    <View key={us.id} >
+                        <View>
+                            <Text>titulo: {us.title}</Text>
                           </View>
 
                         <Button title="Ver Detalhes" color="green"
@@ -34,16 +37,17 @@ function TelaInicial({ route, navigation }) {
                 ))}
             </View>
         </ScrollView>
+        </SafeAreaView>
     )
 }
 
-function VizualizarPost({ route, navigation }) {
+function VisualizarPost({ route, navigation }) {
     const [user, setUser] = useState({})
     useEffect(() => {
-        fetch(`${URL_API}/${route.param.id}`)
+        fetch(`${URL_API2}/${route.params.id}`)
             .then(response => response.json())
-            .then(json => { setUser(json) })
-            .catch(() => { alert.alert("erro", "não foi possível carregar") })
+            .then(json => { setUser(json[0]) })
+            .catch(() => { Alert.alert("erro", "não foi possível carregar") })
     }, [route.params.id])
     
     return(
@@ -52,14 +56,15 @@ function VizualizarPost({ route, navigation }) {
     {/* <Text>ID: {route.params.id}</Text> */}
     <Text>Nome: {user.name}</Text>
     <Text>Email: {user.email}</Text>
-    
     <Text>Endereço</Text>
     <Text>Rua: {user.adress?.street}</Text>
+
         </View>
     </ScrollView>
     )}
 
     function TelaDetalhes ({route, navigation}){
+       
         return(
             <View style={styles.container}>
                 <Text style={styles.titulo}>Detalhes</Text>
@@ -94,6 +99,11 @@ function VizualizarPost({ route, navigation }) {
                       component={TelaDetalhes}
                       options={{title:"Detalhes"}}
                   />
+                  <PilhaTelas.Screen
+                      name="VisualizarPost"
+                      component={VisualizarPost}
+                      options={{title:"VisualizarPost"}}
+                  />
                  {/* <PilhaTelas.Screen
                       name="TelaHistorico"
                       component={TelaHistorico}
@@ -103,8 +113,6 @@ function VizualizarPost({ route, navigation }) {
         </NavigationContainer>
     );
 }
-
-
 
 
 const styles = StyleSheet.create({
