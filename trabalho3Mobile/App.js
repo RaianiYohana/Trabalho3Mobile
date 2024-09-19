@@ -115,6 +115,8 @@ function VisualizarPost({route, navigation}){
             <Text>Comentário: {user.body}</Text>  
             <Text>Email: {user.email}</Text>
             </View> */}
+            <Text style={styles.titulo}>Detalhes</Text>
+
             <Button title="Clique para favoritar" 
             color="red" onPress={marcarFavorito}></Button>
             <Text style={styles}>Comentários</Text>
@@ -127,6 +129,12 @@ function VisualizarPost({route, navigation}){
                             </View>
                         </View>
                     ))}
+                    
+                <Button style={styles.botao}
+                  title='Tela inicial'
+                   color="green"
+                   onPress={()=>navigation.navigate("TelaInicial")}
+               />
             </View>
         </ScrollView>
         
@@ -140,14 +148,10 @@ function VisualizarPost({route, navigation}){
             <View style={styles.container}>
                <Text style={styles.titulo}>Detalhes</Text>
                 <View style={styles.buttonContainer}>
-                <Button
-                    title='Voltar'
-                    color="black"
-                   onPress={()=>navigation.goBack()}
-                 />
+                
                 <Button
                   title='Tela inicial'
-                   color="black"
+                   color="green"
                    onPress={()=>navigation.navigate("TelaInicial")}
                />
              </View>
@@ -249,5 +253,22 @@ const styles = StyleSheet.create({
         marginTop: '10%',
         fontSize: 20
     },
-    
+    com:{
+        margin: 5,
+        fontSize: 20
+    },
+    nome:{
+        margin: 5,
+    },
+    email:{
+        margin: 5,
+    },
+    comentario:{
+        margin: 5,
+    }
+    // botao: {
+    //     fontSize: 20,
+    //     width: '10%',
+    //     margin: 5
+    // }
 });
