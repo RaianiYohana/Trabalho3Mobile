@@ -34,9 +34,10 @@ function TelaInicial({ route, navigation }) {
                             <View>
                                 <Text>titulo: {us.title}</Text>
                             </View>
+                            
 
-                            <Button title="Ver Detalhes" color="green"
-                                onPress={() => { navigation.navigate("VisualizarPost", { 'id': us.id, 'title': us.title, 'body': us.body }) }} />
+                            <Button style={styles.botao2} title="Ver Detalhes" color="green"
+                                onPress={() => { navigation.navigate("VisualizarPost", { 'id': us.id }) }} />
                         </View>
                     ))}
                 </View>
@@ -44,29 +45,6 @@ function TelaInicial({ route, navigation }) {
         </SafeAreaView>
     )
 }
-
-// function VisualizarPost({ route, navigation }) {
-//     const [user, setUser] = useState({})
-//     useEffect(() => {
-//         fetch(`${URL_API2}/${route.params.id}`)
-//             .then(response => response.json())
-//             .then(json => { setUser(json[0]) })
-//             .catch(() => { Alert.alert("erro", "não foi possível carregar") })
-//     }, [route.params.id])
-    
-//     return(
-//     <ScrollView>
-//         <View style={styles.container}>
-//     {/* <Text>ID: {route.params.id}</Text> */}
-//     <Text>Nome: {user.name}</Text>
-//     <Text>Email: {user.email}</Text>
-//     <Text>Endereço</Text>
-//     <Text>Rua: {user.adress?.street}</Text>
-
-//         </View>
-//     </ScrollView>
-//     )}
-
 
 //questao 2
 function VisualizarPost({route, navigation}){
@@ -118,13 +96,13 @@ function VisualizarPost({route, navigation}){
 
             <Button title="Clique para favoritar" 
             color="red" onPress={marcarFavorito}></Button>
-            <Text >Comentários</Text>
+            <Text style={styles.com}>Comentários</Text>
                     {comentario.map(posts => (
-                        <View key={posts.id} >
-                            <View >
-                                <Text>Nome: {posts.name}</Text>
+                        <View key={posts.id} style={styles}>
+                            <View style={styles}>
+                                <Text style={styles.nome}>Nome: {posts.name}</Text>
                                 <Text>Email: {posts.email}</Text>
-                                <Text>Comentário: {posts.body.replaceAll("\n"," ")}</Text>
+                                <Text >Comentário: {posts.body.replaceAll("\n"," ")}</Text>
                             </View>
                         </View>
                     ))}
@@ -229,11 +207,6 @@ export default function App() {
                     component={MeusFavoritos}
                     options={{ title: "MeusFavoritos" }}
                 />
-                {/* <PilhaTelas.Screen
-                      name="TelaHistorico"
-                      component={TelaHistorico}
-                      options={{title:"Histórico"}}
-                  /> */}
             </PilhaTelas.Navigator>
         </NavigationContainer>
     );
@@ -259,15 +232,9 @@ const styles = StyleSheet.create({
     nome:{
         margin: 5,
     },
-    email:{
-        margin: 5,
-    },
-    comentario:{
-        margin: 5,
+    botao2: { 
+        fontSize: 20,
+        width: '100%',
+        margin: 5
     }
-    // botao: {
-    //     fontSize: 20,
-    //     width: '10%',
-    //     margin: 5
-    // }
 });
